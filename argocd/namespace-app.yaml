@@ -1,0 +1,29 @@
+```yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: namespace-app
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/unauthorized001/kubernetes-gitops.git
+    targetRevision: main
+    path: charts/namespace-chart
+
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+```
