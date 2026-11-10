@@ -1,0 +1,7 @@
+namespace:
+  name: dev-team
+
+  labels:
+    environment: development
+    managed-by: argocd
+    project: gitops-demo

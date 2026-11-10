@@ -1,0 +1,42 @@
+name: Helm Chart Validation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'charts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-helm:
+    name: Validate Helm Chart
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Git repository
+        uses: actions/checkout@v4
+
+      - name: Install Helm
+        uses: azure/setup-helm@v4
+
+      - name: Helm lint
+        run: |
+          helm lint charts/namespace-chart
+
+      - name: Validate Kubernetes manifests
+        run: |
+          helm template namespace-management \
+            charts/namespace-chart
+
+      - name: Pipeline success
+        run: echo "Helm validation completed successfully!"
